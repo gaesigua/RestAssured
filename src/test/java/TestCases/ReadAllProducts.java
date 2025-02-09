@@ -11,14 +11,21 @@ import static io.restassured.RestAssured.*;
 import java.util.concurrent.TimeUnit;
 
 public class ReadAllProducts {
+	
+	String baseUri = "https://postman-rest-api-learner.glitch.me/";
+	
 	@Test
 	public void readAllProducts() {
+		
+		
 		//Since we might want to validate many parameters, how can we make sure that when one validation fails, the following ones will not fail also;
 		// We will achieve that by creating a variable (Interface) called Response and save the steps inside that variable; and we introduce the extract() method
+		
+	
 		Response response =
 
 		given()
-		.baseUri("https://postman-rest-api-learner.glitch.me/")
+		.baseUri(baseUri)
 		.header("Content-Type","application/json; charset=utf-8")
 		.auth().none().
 		when()
@@ -61,7 +68,10 @@ public class ReadAllProducts {
 		System.out.println("The Response Body is: " +responseBody);
 		
 		//Is there a way we can validate that the response body is not empty/null, and contains some values
-		//Keep in mind that we have the response body as a String, so we need to use a different class called JsonPath, and then build its constructor by parameterizing our response body variable as a String, and then click on the class to instruct it to convert the parameterized variable to a Json file, and then save it as JsonPath variable; basically we are changing the response body back to a String 
+		//Keep in mind that we have the response body as a String, so we need to use a different class called JsonPath, 
+		//and then build its constructor by parameterizing our response body variable as a String, 
+		//and then click on the class to instruct it to convert the parameterized variable to a Json file, 
+		//and then save it as JsonPath variable; basically we are changing the response body back to a String 
 		
 		JsonPath jsonPath = new JsonPath(responseBody);
 		
