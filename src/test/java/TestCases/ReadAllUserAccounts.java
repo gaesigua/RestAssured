@@ -9,18 +9,19 @@ import static io.restassured.RestAssured.*;
 
 import java.util.concurrent.TimeUnit;
 
-public class ReadOneProduct {
+public class ReadAllUserAccounts {
 	
 	@Test
-	public void readOneProduct() {
+	public void readAllUserAccounts() {
 	
 	Response response =
 		given()
-		.baseUri("")
-		.header("", "")
-		.auth().none().
+		.baseUri("https://template.postman-echo.com")
+		.header("api-key", "OMpqVWAH.UC80wyXTtPwhDgAUdCTx6")
+		.header("Content-Type", "application/json; charset=utf-8").
+		
 		when()
-		.get("").
+		.get("/api/v1/accounts").
 		then()
 		.extract().response();
 	
@@ -42,26 +43,26 @@ public class ReadOneProduct {
 		System.out.println("The Response Time is out of range!!");
 	}
 	
-	//3. Let's validate the Header and perform assertion
-	
+//	//3. Let's validate the Header and perform assertion
+
 	String actualHeaderContentType = response.getHeader("Content-Type");
 	
 	System.out.println("The Header Content Type is: " + actualHeaderContentType);
 	Assert.assertEquals(actualHeaderContentType, "application/json; charset=utf-8");
 
-	//4. Let's validate the Body
+//	//4. Let's validate the Body
 	
 	String actualBody = response.getBody().asPrettyString();
 	System.out.println("The body content is: " + actualBody);
 	
-	//5. Let's validate if the first content is available
+//	//5. Let's validate if the first id's content is available, and if it is available we will print it out
 	
 	JsonPath jsonPath = new JsonPath(actualBody);
 	
-	String extractedBodyContent = jsonPath.getString("message");
+	String extractedBodyContent = jsonPath.getString("accounts[0].id");
 	
 	if(extractedBodyContent!= null) {
-		System.out.println("The first line of the body is: " + extractedBodyContent);
+		System.out.println("The first id of the body is: " + extractedBodyContent);
 	}else {
 		System.out.println("The body is empty!!");
 		}
