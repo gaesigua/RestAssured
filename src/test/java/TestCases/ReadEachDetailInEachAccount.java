@@ -69,7 +69,7 @@ public class ReadEachDetailInEachAccount {
 		}else {
 			System.out.println("The body is empty!!");
 			}
-
+//        6. Let's validate the other elements
 				
 		
 	}
