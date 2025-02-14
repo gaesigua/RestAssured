@@ -2,12 +2,12 @@
 <testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-02-11T12:41:40 CAT" name="Default suite" finished-at="2025-02-11T12:41:47 CAT" duration-ms="6882">
+  <suite started-at="2025-02-14T09:55:01 CAT" name="Default suite" finished-at="2025-02-14T09:55:09 CAT" duration-ms="8059">
     <groups>
     </groups>
-    <test started-at="2025-02-11T12:41:40 CAT" name="Default test" finished-at="2025-02-11T12:41:47 CAT" duration-ms="6882">
+    <test started-at="2025-02-14T09:55:01 CAT" name="Default test" finished-at="2025-02-14T09:55:09 CAT" duration-ms="8059">
       <class name="TestCases.ReadEachDetailInEachAccount">
-        <test-method signature="readEachDetailInEachAccount()[pri:0, instance:TestCases.ReadEachDetailInEachAccount@75d4a5c2]" started-at="2025-02-11T12:41:40 CAT" name="readEachDetailInEachAccount" finished-at="2025-02-11T12:41:47 CAT" duration-ms="6817" status="FAIL">
+        <test-method signature="readEachDetailInEachAccount()[pri:0, instance:TestCases.ReadEachDetailInEachAccount@34e9fd99]" started-at="2025-02-14T09:55:01 CAT" name="readEachDetailInEachAccount" finished-at="2025-02-14T09:55:09 CAT" duration-ms="7984" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[The following asserts failed:
@@ -20,7 +20,7 @@ The Status codes are not matching! expected [210] but found [200],
 The Account Balance are not matching!! expected [60000000000] but found [60]
 at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:46)
 at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:30)
-at TestCases.ReadEachDetailInEachAccount.readEachDetailInEachAccount(ReadEachDetailInEachAccount.java:120)
+at TestCases.ReadEachDetailInEachAccount.readEachDetailInEachAccount(ReadEachDetailInEachAccount.java:135)
 at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
