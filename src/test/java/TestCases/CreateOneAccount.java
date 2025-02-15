@@ -5,6 +5,7 @@ import org.testng.asserts.SoftAssert;
 
 import static io.restassured.RestAssured.*;
 import java.io.File;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.restassured.path.json.JsonPath;
@@ -26,9 +27,33 @@ public class CreateOneAccount {
 	String expectedCreateAccountResponseMessage = "Account was created!";
 	String extractedFirstAccountId;
 	String actualResponseBody;
+	String actualAccountIdFromResponse;
+	String actualAccountOwnerFromResponse;
+	String actualAccountBalanceFromResponse;
+	String actualAccountCurrencyFromResponse;
 	
 	SoftAssert softAssert = new SoftAssert();
+	
+	//Since the .body() can accept a String, let's create a HashMap that will save a key and value both strings;
+	// after creating the HashMap, we will create a method, to be able to pass in the values; and make sure we make the method has a return statement of a HashMap, that will be used later on
+	
+	
+	HashMap<String,String> createBodyMap;
 
+	public HashMap<String,String> getBodyMap(){
+		
+		createBodyMap = new HashMap<String,String>();
+		
+		createBodyMap.put("id", "1111");
+		createBodyMap.put("owner", "gaesigua tin - ToAccount");
+		createBodyMap.put("balance", "20");
+		createBodyMap.put("currency", "COSMIC_COINS");
+		createBodyMap.put("createdAt", "2024-04-04T19:25:38.000Z");
+		
+		return createBodyMap;
+		
+	}
+	
 	
 	@Test(priority=1)
 	public void createOneAccount() {
@@ -40,7 +65,7 @@ public class CreateOneAccount {
 				.baseUri(baseURI)
 				.header("Content-Type", createProductRequestHeader)
 				.header("Authorization", bearerToken)
-				.body(new File("\\test\\java\\myFiles\\CreateOneAccount.json")).		
+				.body(getBodyMap()).				
 				when()
 				.post("/api/v1/accounts").
 				
@@ -83,7 +108,7 @@ public class CreateOneAccount {
 		}
 		
 		//4. When An Account gets created, there's a message that is printed out in the Response Body/Area of the Postman; something like "message": Account was created
-		//so how do we validate that the account was created? We read what is in the Response Body
+		//so how we validate that the account was created by reading what is in the Response Body
 		//Remember that what is printed out in the body is a json file, so how do we extract something from a json file
 		
 		actualBody = response.getBody().asPrettyString();
@@ -99,38 +124,28 @@ public class CreateOneAccount {
 		
 		
 	}
-		@Test(priority=1)
+		@Test(priority=2)
 		public void readAllAccounts() {
 			
-			
-			//Since we might want to validate many parameters, how can we make sure that when one validation fails, the following ones will not fail also;
-			// We will achieve that by creating a variable (Interface) called Response and save the steps inside that variable; and we introduce the extract() method
-			
-		
 			Response response =
 
 			given()
 			.baseUri(baseURI)
 			.header("Content-Type","application/json; charset=utf-8")
-			.auth().none().
+			.header("Authorization",bearerToken)
+			.queryParam("id","999").
 			when()
 			.get("/info").
 			then()
 			.extract().response();
 			
 			
-			//1. Now Let's validate the body; 
+			//1. Now Let's validate the body and grab/read the First account Id that was created; 
 			
 			actualResponseBody = response.getBody().asPrettyString();
-			
 			System.out.println("The Response Body is: " + actualResponseBody);
 			
-			//Is there a way we can validate that the response body is not empty/null, and contains some values
-			//Keep in mind that we have the response body as a String, so we need to use a different class called JsonPath, 
-			//and then build its constructor by parameterizing our response body variable as a String, 
-			//and then click on the class to instruct it to convert the parameterized variable to a Json file, 
-			//and then save it as JsonPath variable; basically we are changing the response body back to a String 
-			
+		
 			jsonPath = new JsonPath(actualResponseBody);
 			
 			//Now Let's extract the First Account ID
@@ -138,6 +153,77 @@ public class CreateOneAccount {
 			extractedFirstAccountId = jsonPath.getString("accounts[0].id");
 			
 			System.out.println("The First Account ID: " + extractedFirstAccountId);
+			
+			softAssert.assertEquals(extractedFirstAccountId, 999, "The Account Id Does Not Match!");			
+					
+		}
+		
+		@Test (priority=3)
+		public void readOneAccount() {
+			
+			Response response = 
+					
+					given()
+					.baseUri(baseURI)
+					.header("Content-Type", createProductRequestHeader)
+					.header("Authorization", bearerToken)
+					.queryParam("id", extractedFirstAccountId).
+					when()
+					.get("/info/").
+					
+					then()
+					.extract().response();
+					
+			//1. Now Let's validate the body, and then check the First Account Id
+			    
+			actualBody = response.getBody().asPrettyString();
+			
+			jsonPath = new JsonPath(actualBody);
+		    
+			actualAccountIdFromResponse = jsonPath.getString("accounts[0].id");
+			System.out.println("The First Account Id: " + actualAccountIdFromResponse);
+			softAssert.assertEquals(actualAccountIdFromResponse, getBodyMap().get("id"), "The Account Id Does Not Match!!");
+			
+			
+			
+            actualAccountOwnerFromResponse = jsonPath.getString("accounts[0].owner");
+			System.out.println("The First Account Owner: " + actualAccountOwnerFromResponse);
+			softAssert.assertEquals(actualAccountOwnerFromResponse, getBodyMap().get("owner"), "The Account Owner Does Not Match!!");
+			
+			
+			actualAccountBalanceFromResponse = jsonPath.getString("accounts[0].balance");
+			System.out.println("The First Account Balance: " + actualAccountBalanceFromResponse);
+			softAssert.assertEquals(actualAccountBalanceFromResponse, getBodyMap().get("balance"), "The Account Balance Does Not Match!!");
+			
+			
+			actualAccountCurrencyFromResponse = jsonPath.getString("accounts[0].currency");
+			System.out.println("The First Account Currency: " + actualAccountCurrencyFromResponse);
+			softAssert.assertEquals(actualAccountCurrencyFromResponse, getBodyMap().get("currency"), "The Account Currency Does Not Match!!");
+			
+			
+			
+			softAssert.assertAll();
+			
+
+			
+			//4. Now Let's validate the Response Time
+			
+			long actualResponseTime = response.getTimeIn(TimeUnit.MILLISECONDS);
+			
+			System.out.println("The Response Time: " + actualResponseTime);
+			
+			if(actualResponseTime<=2000) {
+				
+				System.out.println("The Response Time Is Within The Range!!");
+				
+			}else {
+				
+				System.out.println("The Response Time Is Out Of Range!!");
+				
+			}
+			
+
+			
 			
 			
 			
