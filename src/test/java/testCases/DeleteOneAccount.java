@@ -1,4 +1,4 @@
-package TestCases;
+package testCases;
 
 public class DeleteOneAccount {
 	
